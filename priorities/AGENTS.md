@@ -597,6 +597,341 @@ Not now, but design for it.
 - Later, this can be wrapped as a desktop app, likely with a lightweight wrapper such as Tauri if the user still wants that.
 - Do not start packaging work until the user asks.
 
+## Obsidian-First Alternative
+
+Before building a custom app, the user wants the next agent to seriously consider whether Obsidian itself can satisfy the product goals through a strong vault setup and disciplined workflow.
+
+Treat this as a parallel product path, not a side note.
+
+- Obsidian is philosophically aligned with the project.
+- Obsidian already provides local-first Markdown notes, properties, links, templates, and Bases.
+- The next agent should prefer an Obsidian-first workflow if it can satisfy the goals without forcing awkward workarounds.
+- Only recommend building a custom app if clear pain points remain after mapping the workflow onto Obsidian.
+
+### When To Choose Obsidian First
+
+Prefer Obsidian over a custom app if the workflow can cover most of the following well enough:
+
+- capture possible priorities quickly
+- shape them into consistent notes
+- compare them using Bases views and formulas
+- link priorities to people and cycles
+- write and publish a clear cycle brief
+- preserve durable, readable Markdown as the source of truth
+
+Prefer a custom app later only if repeated pain remains around:
+
+- stronger validation and guardrails
+- polished side-by-side comparison workflows
+- team-fit suggestions with explainable heuristics
+- brief generation that feels too manual in Obsidian
+- multi-manager consistency that Bases/templates cannot keep clean enough
+
+### Obsidian Vault Structure
+
+If using Obsidian first, set up the vault like this:
+
+```text
+00 Home/
+10 Priorities/
+20 People/
+30 Cycles/
+40 Briefs/
+90 Templates/
+99 Archive/
+```
+
+Purpose:
+
+- `00 Home/` holds dashboards, navigation notes, and workflow instructions.
+- `10 Priorities/` holds one note per priority.
+- `20 People/` holds one note per developer/person.
+- `30 Cycles/` holds one note per cycle.
+- `40 Briefs/` holds team-facing summary notes.
+- `90 Templates/` holds note templates.
+- `99 Archive/` holds old or inactive material.
+
+### Obsidian Note Types
+
+Use four note types:
+
+- `priority`
+- `person`
+- `cycle`
+- `brief`
+
+### Obsidian Priority Note Schema
+
+Use one note per priority, filename = stable slug like `improve-onboarding.md`.
+
+Recommended properties:
+
+```yaml
+---
+id: improve-onboarding
+title: Improve onboarding
+type: priority
+status: backlog
+tags:
+  - ux
+  - onboarding
+owners:
+  - "[[alice]]"
+cycle:
+appetite: 4 weeks
+strategic_alignment: 4
+confidence: 3
+team_fit: 5
+rice_reach: 4
+rice_impact: 5
+rice_confidence: 3
+rice_effort: 2
+ice_impact: 5
+ice_confidence: 3
+ice_ease: 4
+delay_cost: 4
+delay_effort: 2
+selected: false
+---
+```
+
+Fixed body sections:
+
+```md
+## Problem
+
+## Why Now
+
+## Desired Outcome
+
+## Boundaries
+
+## Risks
+
+## Staffing Notes
+
+## Decision Rationale
+```
+
+Rules:
+
+- `status` uses the locked generic status model.
+- `selected` is optional and exists only to make "chosen for this cycle" filtering easier.
+- Keep narrative sections fixed for consistency.
+- Keep framework inputs simple 1-5 integers where possible.
+
+### Obsidian Person Note Schema
+
+Filename = stable slug like `alice.md`.
+
+Recommended properties:
+
+```yaml
+---
+id: alice
+type: person
+name: Alice Example
+role: Senior Graphics Engineer
+strengths:
+  - rendering
+  - architecture
+interests:
+  - tooling
+  - onboarding
+domains:
+  - embergen
+  - internal-tools
+load: medium
+tags:
+  - frontend
+  - engine
+---
+```
+
+Body sections:
+
+```md
+## Summary
+
+## Strengths
+
+## Interests
+
+## Constraints
+
+## Notes
+```
+
+### Obsidian Cycle Note Schema
+
+Filename = stable slug like `2026-cycle-2.md`.
+
+Recommended properties:
+
+```yaml
+---
+id: 2026-cycle-2
+type: cycle
+title: 2026 Cycle 2
+start_date: 2026-04-06
+end_date: 2026-05-15
+status: active
+tags:
+  - q2
+---
+```
+
+Body sections:
+
+```md
+## Focus
+
+## Why This Cycle
+
+## Team Brief
+
+## Notes
+```
+
+### Obsidian Brief Note Schema
+
+Use brief notes as polished team-facing communication artifacts.
+
+Recommended properties:
+
+```yaml
+---
+id: 2026-cycle-2-brief
+type: brief
+cycle: "[[2026-cycle-2]]"
+audience: team
+status: draft
+---
+```
+
+Body sections:
+
+```md
+## What We Are Focusing On
+
+## Why These Priorities
+
+## Likely Staffing Direction
+
+## Risks And Tradeoffs
+
+## Open Questions
+```
+
+### Obsidian Bases Setup
+
+Create Bases around `priority` notes first.
+
+Recommended Bases:
+
+- `Backlog`
+  - filter: `type = priority` and `status = backlog`
+- `Todo`
+  - filter: `type = priority` and `status = todo`
+- `Working`
+  - filter: `type = priority` and `status = working`
+- `Current Cycle`
+  - filter: `type = priority` and `cycle = current cycle`
+- `Compare Candidates`
+  - filter: `type = priority` and `status` in `backlog` or `todo`
+- `Done`
+  - filter: `type = priority` and `status = done`
+- `Cancelled`
+  - filter: `type = priority` and `status = cancelled`
+
+Recommended visible fields:
+
+- `title`
+- `status`
+- `cycle`
+- `appetite`
+- `owners`
+- `strategic_alignment`
+- `confidence`
+- `team_fit`
+- `rice score`
+- `ice score`
+- `delay/effort score`
+- `selected`
+
+### Obsidian Formula Guidance
+
+If Bases formulas support it cleanly, compute:
+
+- `rice_score = (rice_reach * rice_impact * rice_confidence) / rice_effort`
+- `ice_score = ice_impact * ice_confidence * ice_ease`
+- `delay_effort_score = delay_cost / delay_effort`
+
+If formula support is awkward, keep the raw inputs and use manual lightweight calculation instead of overengineering the vault.
+
+### Obsidian Workflow
+
+Use this workflow before considering a custom app.
+
+1. Capture ideas
+   - Create a new priority note from the template.
+   - Set `status: backlog`.
+   - Fill title, tags, rough problem, and appetite if known.
+2. Shape promising ideas
+   - Fill fixed sections.
+   - Add strategic alignment, confidence, and team fit.
+   - Add optional RICE, ICE, and delay/effort inputs if useful.
+   - Link likely owners and cycle if known.
+3. Compare candidates
+   - Use the `Compare Candidates` Base.
+   - Sort by relevant score.
+   - Open 2-4 notes side by side when deeper judgment is needed.
+   - Record decision reasoning in `Decision Rationale`.
+4. Select current direction
+   - Move chosen priorities to `todo` or `working`.
+   - Assign cycle links.
+   - Optionally set `selected: true`.
+5. Publish a cycle brief
+   - Create or update a brief note.
+   - Link chosen priorities.
+   - Explain what, why now, likely staffing, and tradeoffs.
+6. Review and close
+   - Mark completed items `done`.
+   - Mark abandoned items `cancelled`.
+   - Archive old cycles and briefs when useful.
+
+### Team Fit In Obsidian
+
+This is the main area where Obsidian may remain weaker than a dedicated app.
+
+Recommended approach:
+
+- keep strong person notes
+- use links for likely owners
+- use shared tags/domains across priorities and people
+- keep a simple manual rubric for `team_fit`
+- explain staffing logic in `Staffing Notes`
+
+Suggested rubric:
+
+- `5` = strong expertise + strong interest + reasonable load
+- `4` = strong expertise + acceptable load
+- `3` = plausible fit
+- `2` = weak fit
+- `1` = poor fit
+
+### Obsidian-First Evaluation Criteria
+
+Use Obsidian as v1 if these are true after real usage:
+
+- priority creation is fast and consistent
+- Bases gives useful decision views
+- comparison feels good enough
+- brief writing is not too repetitive
+- another manager can follow the workflow without much friction
+
+If those conditions fail, the next agent may justify a custom app. If they hold, Obsidian should be treated as the product for now.
+
 ## Final Reminder To The Next Agent
 
 - Start with scaffolding and the content layer.
