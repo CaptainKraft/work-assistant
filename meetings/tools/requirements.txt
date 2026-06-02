@@ -1,0 +1,4 @@
+# Meeting transcription pipeline dependencies.
+# faster-whisper uses CTranslate2 (no PyTorch); pulls in ctranslate2, av,
+# onnxruntime (Silero VAD), tokenizers, and huggingface-hub.
+faster-whisper>=1.0.0

@@ -1,4 +1,17 @@
+# OS / editor cruft
 .DS_Store
+__pycache__/
+
+# gh workflow scratch
 gh/tmp
-meetings/2025
-meetings/2026
+
+# meetings tool virtualenv
+meetings/tools/.venv
+
+# Meeting recordings live under meetings/<year>/<date_title>/.
+# Keep ONLY the transcript and summary in git; everything else (audio,
+# per-track JSON, combined.json, and old .txt/.vtt/.wav exports) stays local.
+meetings/[0-9][0-9][0-9][0-9]/**
+!meetings/[0-9][0-9][0-9][0-9]/**/
+!meetings/[0-9][0-9][0-9][0-9]/**/transcripts/combined.md
+!meetings/[0-9][0-9][0-9][0-9]/**/notes/summary.md
