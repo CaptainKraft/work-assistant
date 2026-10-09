@@ -19,3 +19,6 @@ meetings/[0-9][0-9][0-9][0-9]/**
 # Discord catch-up: raw message dumps and the run marker stay local; only summaries are tracked.
 discord/[0-9][0-9][0-9][0-9]/**/raw/
 discord/.state.json
+
+# Obsidian per-device UI state
+priorities/vault/.obsidian/workspace.json
